@@ -1,0 +1,242 @@
+:root {
+
+    font-family: "Inter";
+
+    /*DARK MODE COLOR PALETTE*/
+    
+    --font-color-primary: #FFFFFF; 
+
+    --background-color: #19181D;
+
+    --calculator-color-primary: #3E3A4B;
+    --calculator-color-secondary: #9289B1;
+
+    --operation-keys-top-color-primary: #302E36;
+    --operation-keys-top-color-secondary: #4A4752;
+    
+    --hover-operation-keys-top-color-primary: #413E4A;
+    --hover-operation-keys-top-color-secondary: #696671;
+
+    --numpad-keys-color-primary: #3E3A4B;
+    --numpad-keys-color-secondary: #5D5771;
+
+    --hover-numpad-keys-color-primary: #524D64;
+    --hover-numpad-keys-color-secondary: #6B6679;
+    
+    --operation-keys-side-color-primary: #B37400;
+    --operation-keys-side-color-secondary: #F3BB78;
+
+    --hover-operation-keys-side-color-primary: #CD8806;
+    --hover-operation-keys-side-color-secondary: #F3CD9E;
+
+    --switch-background-color: rgba(62, 58, 75, 0.5);
+    --toggle-background-color: #3E3A4B;
+
+    
+}
+
+body.lightmode {
+    /*LIGHT MODE COLOR PALETTE*/
+
+    --font-color-primary: #302E36; 
+
+    --background-color: #D3D0FF;
+
+    --calculator-color-primary: #83809D;
+    --calculator-color-secondary: #9D95B8;
+
+    --operation-keys-top-color-primary: #696280;
+    --operation-keys-top-color-secondary: #B6B5CE;
+    
+    --hover-operation-keys-top-color-primary: #5D5870;
+    --hover-operation-keys-top-color-secondary: #AFAEC0;
+
+    --numpad-keys-color-primary: #9289B1;
+    --numpad-keys-color-secondary: #E8E6FF;
+
+    --hover-numpad-keys-color-primary: #787191;
+    --hover-numpad-keys-color-secondary: #C3C0E2;
+    
+    --operation-keys-side-color-primary: #D48B04;
+    --operation-keys-side-color-secondary: #FFDEB5;
+
+    --hover-operation-keys-side-color-primary: #B57704;
+    --hover-operation-keys-side-color-secondary: #DBBD9A;
+
+    --switch-background-color: rgba(131, 128, 157, 0.5);
+    --toggle-background-color: #83809D;
+
+    background-color: var(--background-color);
+}
+
+body {
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    height: 70px;
+    width: 368px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+#switch {
+    height: 34.5px;
+    width: 75px;
+    background: var(--switch-background-color);
+    
+    border-color: var(--switch-background-color);
+    border-radius: 5px;
+    border: 2px solid var(--toggle-background-color);
+}
+
+#toggle {
+    position: relative;
+    height: 34.5px;
+    width: 37.5px;
+    background-color: var(--toggle-background-color);
+    border-radius:  2.5px;
+
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateX(0%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+.lightmode#toggle {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+
+    transform: translateX(100%);
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+i {
+    color: var(--font-color-primary);
+}
+
+#switch:hover, #toggle:hover, i:hover {
+    cursor: pointer;
+}
+
+main {
+    width: 368px;
+    height: 708px;
+    border-radius: 10px;
+    background: linear-gradient(var(--calculator-color-primary) 30%, var(--calculator-color-secondary) 100%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#calculationWindow {
+    height: 70px;
+    width: 350px;
+    margin-top: 25px;
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 30px;
+
+    
+    text-align: right;
+
+    white-space: normal;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
+    
+    box-sizing: border-box;
+    scrollbar-width: none; /* Firefox */
+}
+
+#calculationWindow::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+
+}
+
+#resultWindow {
+    height: 70px;
+    width: 350px;
+    margin-bottom: 50px;
+    color: var(--font-color-primary);
+    font-size: 70px;
+    text-align: right;
+
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    scrollbar-width: none; /* Firefox */
+}
+
+#resultWindow::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+#keypad {
+    display: flex;
+    flex-wrap: wrap;
+    justify-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 25px;
+    height: 75px;
+    width: 75px;
+    font-size: 40px;
+    color: var(--font-color-primary);
+
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+button:hover {
+    cursor: pointer;   
+}
+
+#buttonZero { 
+    width: 165px;
+} 
+
+.operationKeysTop {
+    background: linear-gradient(135deg, var(--operation-keys-top-color-primary) 25%, var(--operation-keys-top-color-secondary) 100%);
+}
+
+.operationKeysTop:hover {
+    background: linear-gradient(135deg, var(--hover-operation-keys-top-color-primary) 25%, var(--hover-operation-keys-top-color-secondary) 100%)
+}
+
+.operationKeysSide {
+    background: linear-gradient(135deg, var(--operation-keys-side-color-primary) 25%, var(--operation-keys-side-color-secondary) 100%);
+}
+
+.operationKeysSide:hover {
+    background: linear-gradient(135deg, var(--hover-operation-keys-side-color-primary) 25%, var(--hover-operation-keys-side-color-secondary) 100%);
+}
+
+.numpadKeys {
+    background: linear-gradient(135deg, var(--numpad-keys-color-primary) 25%, var(--numpad-keys-color-secondary) 100%);
+}
+
+.numpadKeys:hover {
+    background: linear-gradient(135deg, var(--hover-numpad-keys-color-primary) 25%, var(--hover-numpad-keys-color-secondary) 100%);
+}
