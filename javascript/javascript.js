@@ -1,43 +1,53 @@
-// Holds the values entered to show on the display
-let inputList = []; 
+//== GLOBAL VARIABLES ==//
+
+// Holds the values for internal calculation
+let INPUT_LIST = []; 
+
+// Holds the values for display, reflects what the users sees (e.g., shows "%")
+let DISPLAY_LIST = [];
 
 // Holds last value entered
-let lastInput = "";
+let LAST_INPUT = "";
 
 // Holds valid operations
-const validOperations = ["+","-","/","*","."];
+const VALID_OPERATIONS = ["+","-","/","*","."];
 
 // Holds valid keyboard keys
-const validKeys = ["1","2","3","4","5","6","7","8","9","0","+","-","/","*",".","(",")","Enter","Escape","Backspace"];
+const VALID_KEYS = ["1","2","3","4","5","6","7","8","9","0","+","-","/","*",".","(",")","Enter","Escape","Backspace"];
 
 // Holds value for dark mode 1 = yes, 0 = no
-let darkMode = 1;
+let DARK_MODE = 1;
+
+
+
+
+
 
 // Wait for the DOM content to be fully loaded before setting up event listeners
 window.addEventListener("DOMContentLoaded", setupKeyboardListener);
 window.addEventListener("DOMContentLoaded", setupButtonListener);
-window.addEventListener("DOMContentLoaded",setupToogleListner);
+window.addEventListener("DOMContentLoaded",setupToggleListner);
 
 // Sets up the click event listener for toggling between dark and light mode
-function setupToogleListner() {
+function setupToggleListner() {
     const toggle = document.getElementById("switch");
     toggle.addEventListener("click", () => {
         const body = document.getElementsByTagName("body")[0];
 
-        if (darkMode === 1) {
+        if (DARK_MODE === 1) {
         body.classList.add("lightmode");
-        darkMode = 0;
+        DARK_MODE = 0;
         setToggleLightMode();
         } 
         else {
         body.classList.remove("lightmode");
-        darkMode = 1;
+        DARK_MODE = 1;
         setToggleDarkMode();
         }
     });
 }
 
-// Sets theme to light mode
+// Set theme to light mode
 function setToggleLightMode() {
     const toggle = document.getElementById("toggle");
     const icon = document.getElementById("icon");
@@ -47,7 +57,7 @@ function setToggleLightMode() {
     icon.classList.add("bi-sun-fill");
 }
 
-// Sets theme to dark mode
+// Set theme to dark mode
 function setToggleDarkMode() {
     const toggle = document.getElementById("toggle");
     const icon = document.getElementById("icon");
@@ -56,7 +66,7 @@ function setToggleDarkMode() {
     icon.classList.add("bi-moon-stars-fill");
 }
 
-// Sets up the keydown event listener to handle keyboard input
+// Set up the keydown event listener to handle keyboard input
 function setupKeyboardListener() {
     window.addEventListener("keydown", onKeyDown);
 }
@@ -65,12 +75,12 @@ function setupKeyboardListener() {
 function onKeyDown(event) {
     const key = event.key;
     
-    if(validKeys.includes(key)) {
+    if(VALID_KEYS.includes(key)) {
         handleInput(key);
     }
 }
 
-// Sets up the click event listener to handle mouse input
+// Set up the click event listener to handle mouse input
 function setupButtonListener() {
     const buttons = document.getElementsByTagName("button");
 
@@ -82,7 +92,7 @@ Array.from(buttons).forEach(button => {
 });
 }
 
-// Routes input to the appropriate calculator function
+// Route input to the appropriate calculator function
 function handleInput(key) {
     switch (key) {
         case "C":
@@ -124,49 +134,54 @@ function handleInput(key) {
 }
 
 function clearCalculator() {
-    // Resets list
-    inputList = [];
+    // Reset list
+    INPUT_LIST = [];
+    DISPLAY_LIST = [];
 
-    // Clears results display
+    // Cleas results display
     const resultsDisplay = document.getElementById("resultWindow");
     resultsDisplay.innerHTML = "";
     
-    // Clears calculation display
+    // Clear calculation display
     const calculationDisplay = document.getElementById("calculationWindow");
     calculationDisplay.innerHTML ="";
 
-    // Resets last input
-    lastInput = "";
+    // Reset last input
+    LAST_INPUT = "";
 }
 
 function minusOperation() {
-    if (!validOperations.includes(lastInput)) {
-        inputList.push("-");
-        lastInput = "-";
+    if (!VALID_OPERATIONS.includes(LAST_INPUT)) {
+        INPUT_LIST.push("-");
+        DISPLAY_LIST.push("-");
+        LAST_INPUT = "-";
         updateResultsDisplay();
     }
 }
 
 function addOperation() {
-    if (!validOperations.includes(lastInput) && lastInput !== "") {
-        inputList.push("+");
-        lastInput = "+";
+    if (!VALID_OPERATIONS.includes(LAST_INPUT) && LAST_INPUT !== "") {
+        INPUT_LIST.push("+");
+        DISPLAY_LIST.push("+");
+        LAST_INPUT = "+";
         updateResultsDisplay();
     }
 }
 
 function multiplyOperation() {
-    if (!validOperations.includes(lastInput) && lastInput !== "") {
-        inputList.push("*");
-        lastInput = "*";
+    if (!VALID_OPERATIONS.includes(LAST_INPUT) && LAST_INPUT !== "") {
+        INPUT_LIST.push("*");
+        DISPLAY_LIST.push("*");
+        LAST_INPUT = "*";
         updateResultsDisplay();
     }
 }
 
 function divisionOperation() {
-    if (!validOperations.includes(lastInput) && lastInput !== "") {
-        inputList.push("/");
-        lastInput = "/";
+    if (!VALID_OPERATIONS.includes(LAST_INPUT) && LAST_INPUT !== "") {
+        INPUT_LIST.push("/");
+        DISPLAY_LIST.push("/");
+        LAST_INPUT = "/";
         updateResultsDisplay();
     }
 }
@@ -175,10 +190,10 @@ function addDecimal() {
     const charList = [];
 
     // Reconstructs last number from the array to determine if a decimal is already in the number
-    for (let i = inputList.length-1; i >= 0; i--) {
+    for (let i = INPUT_LIST.length-1; i >= 0; i--) {
         // Exits for loop if until operator is determined
-        if(validOperations.includes(inputList[i]) && inputList[i] !== ".") break;
-        let char = inputList[i];
+        if(VALID_OPERATIONS.includes(INPUT_LIST[i]) && INPUT_LIST[i] !== ".") break;
+        let char = INPUT_LIST[i];
         charList.push(char);
     }
 
@@ -186,9 +201,10 @@ function addDecimal() {
     const wholeNumber =charList.join("");
     
     // Checks if last number in the array includes a decimal, is an operator, or is empty
-    if(!wholeNumber.includes(".") && !validOperations.includes(lastInput) && lastInput !== "") {
-        inputList.push(".");
-        lastInput = ".";
+    if(!wholeNumber.includes(".") && !VALID_OPERATIONS.includes(LAST_INPUT) && LAST_INPUT !== "") {
+        INPUT_LIST.push(".");
+        DISPLAY_LIST.push(".");
+        LAST_INPUT = ".";
         updateResultsDisplay();
     }
     
@@ -196,69 +212,112 @@ function addDecimal() {
 
 function percentOperation() {
     let lastNumber = "";
+    let baseNumber = "";
+    let lastOperator = ""
     let countToRemove = 0;
 
-    // Reconstructs the last number from the array
-    for (let i = inputList.length - 1; i >= 0; i--) {
-        // Breaks loop if it detects a valid operation (except ".")
-        if (validOperations.includes(inputList[i]) && inputList[i] !== ".") break;
-        lastNumber = inputList[i] + lastNumber;
+    // Step 1: Extract the most recent number entered from INPUT_LIST
+    // Traverse the array backwards, building the last number digit by digit
+    for (let i = INPUT_LIST.length - 1; i >= 0; i--) {
+        // Stop if we find an operator (but allow decimal points in the number)
+        if (VALID_OPERATIONS.includes(INPUT_LIST[i]) && INPUT_LIST[i] !== ".") break;
+        // Add current digit to the start of the last number to piece it together
+        lastNumber = INPUT_LIST[i] + lastNumber; 
+        // Check last operator
+        lastOperator = INPUT_LIST[i-1];
+        // Track how many characters we need to remove later
         countToRemove++;
     }
 
-    // Check if lastNumber is empty or not a valid number
+    // Step 2: Extract the base number before the operator (used for + or - percent context to avoid false caluclation)
+    for (let i = INPUT_LIST.length - (countToRemove + 2); i >= 0; i--) {
+        if (VALID_OPERATIONS.includes(INPUT_LIST[i]) && INPUT_LIST[i] !== ".") break;
+        baseNumber = INPUT_LIST[i] + baseNumber;
+    }
+
+    // Step 3: Validate the most recent number and base number
     const parsedNumber = parseFloat(lastNumber);
     if (isNaN(parsedNumber)) return;
+    const parsedBase = parseFloat(baseNumber);
+    if (isNaN(parsedBase)) return;
 
-    // Converts last number to percent by dividing by 100
-    const numberInPercent = parsedNumber / 100;
+    // Step 4: Remove the last number from the end of INPUT_LIST so we can insert the percentage form
+    INPUT_LIST.splice(INPUT_LIST.length - countToRemove, countToRemove);
 
-    // Updates last input
-    lastInput = numberInPercent;
+    // Step 5: Handle percentage logic baased on context (+- vs */)
+    if (lastOperator === "+" || lastOperator === "-") {
+        // For + or - convert "base ± percent" into "base ± (base * percent)"
+        // e.g. prevents 100-50% becoming 99.5 instead of the correct result 100-(100*0.5)=50
+        INPUT_LIST.push("(");
+        INPUT_LIST.push(baseNumber);
+        INPUT_LIST.push("*");
+        INPUT_LIST.push(parsedNumber/100);
+        INPUT_LIST.push(")");
+        // Update last input
+        LAST_INPUT = ")";
+    }
+    else {
+        // For * or / or standalone numbers: just convert to decimal percent (e.g. 50 > 0.5)
+        const numberInPercent = parsedNumber / 100;
 
-    // Deletes the amount of entries in the list depending on the size of the number
-    inputList.splice(inputList.length - countToRemove, countToRemove);
+        // Update last input
+        LAST_INPUT = numberInPercent;
 
-    // Updates the array with the percentage result
-    inputList.push(numberInPercent.toString());
+        // Updates the array with the percentage result
+        INPUT_LIST.push(numberInPercent.toString());
+    }
 
+    // Step 6: Update display list and UI
+    // For visual display, show to user % sign
+    DISPLAY_LIST.push("%"); 
     updateResultsDisplay();
+    
 }
 
 function addBracket() {
     // Counts numbers of opening and closing brackets
     // Filter function, for each character, which the character equals ( or ) return true
     // Saves it in an array, with .length able to find out amount
-    const openBracketCount = inputList.filter(char => char === "(").length;
-    const closeBracketCount = inputList.filter(char => char === ")").length;
+    const openBracketCount = INPUT_LIST.filter(char => char === "(").length;
+    const closeBracketCount = INPUT_LIST.filter(char => char === ")").length;
 
     // Condition to set opening bracket
-    if(inputList.length === 0 || validOperations.includes(lastInput) || lastInput === "(") {
-        inputList.push("(");
-        lastInput = "(";
+    if((INPUT_LIST.length === 0 && LAST_INPUT !== "(") || (VALID_OPERATIONS.includes(LAST_INPUT) && LAST_INPUT !== "(")) {
+        INPUT_LIST.push("(");
+        DISPLAY_LIST.push("(");
+        LAST_INPUT = "(";
     } 
     // Condition to set closing bracket
-    else if (openBracketCount > closeBracketCount && lastInput !== "(" && !validOperations.includes(lastInput)) {
-        inputList.push(")");
-        lastInput = ")";
+    else if (openBracketCount > closeBracketCount && LAST_INPUT !== "(" && !VALID_OPERATIONS.includes(LAST_INPUT)) {
+        INPUT_LIST.push(")");
+        DISPLAY_LIST.push(")");
+        LAST_INPUT = ")";
     }
     updateResultsDisplay();
 }
 
 function addNumber(key) {
-    inputList.push(key);
-    lastInput = key;
+    INPUT_LIST.push(key);
+    DISPLAY_LIST.push(key);
+    LAST_INPUT = key;
     updateResultsDisplay();
 }
 
 function getResult() {
     // Prevents evaluation if the last input is empty or just a minus sign
-    if (lastInput !== "" && !validOperations.includes(lastInput)) {
+    if (LAST_INPUT !== "" && !VALID_OPERATIONS.includes(LAST_INPUT)) {
     const display = document.getElementById("resultWindow");
-    const calculation = display.innerHTML;
+    const calculation = INPUT_LIST.join("");
+
+    // Check for division by zero (e.g. 1 / 0) using regex
+    if (/\/0(\D|$)(?!\d)/.test(calculation)) {
+        display.innerHTML = "Error";
+        return;
+    }
 
     // Updates the calculation history display with current input
-    updateCalculationDisplay(calculation)
+    const expression = DISPLAY_LIST.join("");
+    updateCalculationDisplay(expression);
 
     // Takes the string and handles it as a mathematical calculation
     const result = eval(calculation);
@@ -266,10 +325,12 @@ function getResult() {
     // Displays teh result on the screen
     display.innerHTML = result;
 
-    // Resets inputList and initialize with the result for the next calculation
-    inputList = [];
-    inputList.push(result.toString());
-    lastInput = result.toString();
+    // Resets INPUT_LIST and initialize with the result for the next calculation
+    INPUT_LIST = [];
+    INPUT_LIST.push(result.toString());
+    DISPLAY_LIST = [];
+    DISPLAY_LIST.push(result.toString());
+    LAST_INPUT = result.toString();
     }    
 }
 
@@ -279,10 +340,10 @@ function updateCalculationDisplay(calculation) {
     calculationDisplay.innerHTML = calculation;
 }
 
-// Updates the results display with the contents of inputList to show all the inputs made or the result
+// Updates the results display with the contents of INPUT_LIST to show all the inputs made or the result
 function updateResultsDisplay() {
     const display = document.getElementById("resultWindow");
-    display.innerHTML = inputList.join("");
+    display.innerHTML = DISPLAY_LIST.join("");
     // Scrolls to the right after each new injection
     display.scrollLeft = display.scrollWidth;
 }
