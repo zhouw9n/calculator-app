@@ -94,7 +94,7 @@ header {
     
     border-color: var(--switch-background-color);
     border-radius: 5px;
-    border: 2px solid var(--toggle-background-color);
+    border: 1px solid var(--toggle-background-color);
 }
 
 #toggle {

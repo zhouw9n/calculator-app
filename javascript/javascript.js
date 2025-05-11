@@ -138,7 +138,7 @@ function clearCalculator() {
     INPUT_LIST = [];
     DISPLAY_LIST = [];
 
-    // Cleas results display
+    // Clear results display
     const resultsDisplay = document.getElementById("resultWindow");
     resultsDisplay.innerHTML = "";
     
@@ -228,24 +228,27 @@ function percentOperation() {
         // Track how many characters we need to remove later
         countToRemove++;
     }
-
+    
     // Step 2: Extract the base number before the operator (used for + or - percent context to avoid false caluclation)
     for (let i = INPUT_LIST.length - (countToRemove + 2); i >= 0; i--) {
         if (VALID_OPERATIONS.includes(INPUT_LIST[i]) && INPUT_LIST[i] !== ".") break;
         baseNumber = INPUT_LIST[i] + baseNumber;
     }
 
-    // Step 3: Validate the most recent number and base number
+    // Step 3: Validate last number
     const parsedNumber = parseFloat(lastNumber);
     if (isNaN(parsedNumber)) return;
-    const parsedBase = parseFloat(baseNumber);
-    if (isNaN(parsedBase)) return;
+
+    
 
     // Step 4: Remove the last number from the end of INPUT_LIST so we can insert the percentage form
     INPUT_LIST.splice(INPUT_LIST.length - countToRemove, countToRemove);
 
     // Step 5: Handle percentage logic baased on context (+- vs */)
     if (lastOperator === "+" || lastOperator === "-") {
+        // Validate base number
+        const parsedBase = parseFloat(baseNumber);
+         if (isNaN(parsedBase)) return;
         // For + or - convert "base ± percent" into "base ± (base * percent)"
         // e.g. prevents 100-50% becoming 99.5 instead of the correct result 100-(100*0.5)=50
         INPUT_LIST.push("(");
@@ -256,7 +259,7 @@ function percentOperation() {
         // Update last input
         LAST_INPUT = ")";
     }
-    else {
+    else{
         // For * or / or standalone numbers: just convert to decimal percent (e.g. 50 > 0.5)
         const numberInPercent = parsedNumber / 100;
 
@@ -296,6 +299,16 @@ function addBracket() {
     updateResultsDisplay();
 }
 
+function checkEvenBrackets() {
+    const openBracketCount = INPUT_LIST.filter(char => char === "(").length;
+    const closeBracketCount = INPUT_LIST.filter(char => char === ")").length;
+    
+    for (let i = closeBracketCount; i < openBracketCount; i++) {
+        INPUT_LIST.push(")");
+        DISPLAY_LIST.push(")");
+    }
+}
+
 function addNumber(key) {
     INPUT_LIST.push(key);
     DISPLAY_LIST.push(key);
@@ -306,14 +319,22 @@ function addNumber(key) {
 function getResult() {
     // Prevents evaluation if the last input is empty or just a minus sign
     if (LAST_INPUT !== "" && !VALID_OPERATIONS.includes(LAST_INPUT)) {
+    // Check if brackets are even set
+    checkEvenBrackets();
     const display = document.getElementById("resultWindow");
     const calculation = INPUT_LIST.join("");
 
     // Check for division by zero (e.g. 1 / 0) using regex
-    if (/\/0(\D|$)(?!\d)/.test(calculation)) {
+    if (/\/0(\D|$)(?!\d)/.test(calculation) || !(/\d/).test(calculation)) {
         display.innerHTML = "Error";
+        INPUT_LIST = [];
+        DISPLAY_LIST = [];
+        LAST_INPUT = "";
+        
         return;
     }
+
+    
 
     // Updates the calculation history display with current input
     const expression = DISPLAY_LIST.join("");
