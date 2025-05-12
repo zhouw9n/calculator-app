@@ -318,7 +318,6 @@ function percentOperation() {
   // Step 6: Update display list and UI
   // For visual display, show to user % sign
   DISPLAY_LIST.push("%");
-  console.log(INPUT_LIST.join(""));
   updateResultsDisplay();
 }
 
