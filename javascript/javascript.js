@@ -46,6 +46,8 @@ let DARK_MODE = 1;
 window.addEventListener("DOMContentLoaded", setupKeyboardListener);
 window.addEventListener("DOMContentLoaded", setupButtonListener);
 window.addEventListener("DOMContentLoaded", setupToggleListner);
+const abc = eval("135*(0.06-0.06)");
+console.log(abc); 
 
 // Sets up the click event listener for toggling between dark and light mode
 function setupToggleListner() {
@@ -410,6 +412,7 @@ function getResult() {
     try {
       // Takes the string and handles it as a mathematical calculation
       const result = eval(calculation);
+      
 
       // Calls error message function if result is infinty i.e. x divided by 0 or NaN i.e. 0/0
       if (!Number.isFinite(result) || isNaN(result)) {
